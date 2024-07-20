@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\ShortenUrlDao;
+
 class ShortenUrlService{
     private $domain = 'http://localhost:8000/';
 
@@ -25,6 +27,11 @@ class ShortenUrlService{
         return $random;
     }
 
-    
+    public function increment_click_counter($data)
+    {
+        echo $data['clicks']+1;
+        $dao = new ShortenUrlDao();
+        $dao->click_event($data['shorten_url'], $data['clicks']+1);
+    }
 
 }

@@ -31,28 +31,39 @@ class ShortenUrlDao{
 
     public function get_by_short_code(string $short_code) : array | false 
     {
-        $sql = "SELECT original_url FROM shorten_url WHERE shorten_url = :shorten_url";
+        $sql = "SELECT * FROM shorten_url WHERE shorten_url = :shorten_url";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue(":shorten_url", $short_code, PDO::PARAM_STR);
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
         return $data;
+    }
+
+    public function click_event(string $short_code, int $click)
+    {
+        $sql = "UPDATE shorten_url
+                SET clicks = :clicks
+                WHERE shorten_url = :shorten_url
+                ";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue(":clicks", $click, PDO::PARAM_INT);
+        $stmt->bindValue(":shorten_url", $short_code, PDO::PARAM_STR);
+        $stmt->execute();
     }
 
     // public 
 
-    public function get_original(string $short_code) : string | false
-    {
-        $sql = "SELECT original_url FROM shorten_url WHERE shorten_url = :shorten_url";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue(":shorten_url", $short_code, PDO::PARAM_STR);
-        $stmt->execute();
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    // public function get_original(string $short_code) : string | false
+    // {
+    //     $sql = "SELECT original_url FROM shorten_url WHERE shorten_url = :shorten_url";
+    //     $stmt = $this->connection->prepare($sql);
+    //     $stmt->bindValue(":shorten_url", $short_code, PDO::PARAM_STR);
+    //     $stmt->execute();
+    //     $data = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        return $data;
-    }
+    //     return $data;
+    // }
 
     public function update(string $short_code) : int 
     {
