@@ -31,7 +31,7 @@ class ShortenUrlService{
     {
         echo $data['clicks']+1;
         $dao = new ShortenUrlDao();
-        $dao->click_event($data['shorten_url'], $data['clicks']+1);
+        $dao->increment_click($data['short_code'], $data['clicks']+1);
     }
 
 }

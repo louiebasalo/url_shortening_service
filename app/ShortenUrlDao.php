@@ -13,8 +13,17 @@ class ShortenUrlDao{
 
     public function get_all() : array
     {
+        $sql = "SELECT * FROM shortened_url";
+        $stmt = $this->connection->query($sql);
 
-        return [];
+        $data = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            array_push($data,$row);
+        }
+        return $data;
     }
 
     public function create(array $data) : string
@@ -40,7 +49,7 @@ class ShortenUrlDao{
         return $data;
     }
 
-    public function click_event(string $short_code, int $click)
+    public function increment_click(string $short_code, int $click)
     {
         $sql = "UPDATE shortened_url
                 SET clicks = :clicks
@@ -50,16 +59,28 @@ class ShortenUrlDao{
         $stmt->bindValue(":clicks", $click, PDO::PARAM_INT);
         $stmt->bindValue(":short_code", $short_code, PDO::PARAM_STR);
         $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
-    public function update(string $short_code) : int 
-    {
+    public function update(string $short_code, string $long_url) : int 
+    {   
+        $sql = "UPDATE shortened_url SET long_url = :long_url WHERE short_code = :short_code";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue(':long_url', $long_url);
+        $stmt->bindValue(':short_code', $short_code);
+        $stmt->execute();
 
-        return 1;
+        return $stmt->rowCount();
     }
 
     public function delete(string $short_code) : int
     {
-        return 1;
+        $sql = 'DELETE FROM shortened_url WHERE short_code = :short_code';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue(':short_code',$short_code);
+        $stmt->execute();
+        
+        return $stmt->rowCount();
     }
 }
