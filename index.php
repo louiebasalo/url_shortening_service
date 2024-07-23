@@ -11,8 +11,6 @@ spl_autoload_register(function($class){
 header("Content-type: application/json; charset=UTF-8");
 
 $parts = explode("/",$_SERVER["REQUEST_URI"]);
-// echo $_SERVER["REQUEST_URI"];
-// /shorturl/v1/fd14sY
 
 if ($parts[1] == 'shorturl')
 {

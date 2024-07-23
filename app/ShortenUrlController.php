@@ -36,7 +36,6 @@ class ShortenUrlController {
         switch($method) {
             case "GET":
                 echo json_encode($data, JSON_PRETTY_PRINT);
-                // echo $data['original_url'];
                 break;
         }
     }
@@ -47,12 +46,12 @@ class ShortenUrlController {
             $data = (array) json_decode(file_get_contents("php://input"), true);
             $dao = new ShortenUrlDao();
             $shorten = new ShortenUrlService();
-            $data['shorten_url'] = $shorten->generate();
-            $id = $dao->create($data);
+            $data['short_code'] = $shorten->generate();
+            $dao->create($data);
             http_response_code(201);
             echo json_encode([
                 'message' => 'short url created.',
-                "short url" => $data['shorten_url']
+                "short url" => $data['short_code']
             ]);
         }else{
             echo "not a post request.";
