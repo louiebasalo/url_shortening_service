@@ -1,8 +1,8 @@
 <?php
-namespace App;
+namespace Api\v1;
 
-use App\ShortenUrlDao;
-use App\ShortenUrlService;
+use Api\v1\ShortenUrlDao;
+use Api\v1\ShortenUrlService;
 
 class RedirectController {
 

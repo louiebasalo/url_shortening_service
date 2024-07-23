@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace Api\v1;
 
 use PDO;
 

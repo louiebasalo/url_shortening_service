@@ -3,18 +3,62 @@ namespace Route;
 
 class Route {
 
-    private $routes = array();
+    private static $routes = [];
+    private static $notFond;
 
-    private function add(string $uri, string $method)  
+    public function __construct(){
+        self::$notFond = function() {
+            http_response_code(404);
+            echo json_encode(['Resource Not Found.']);
+        };
+    }
+
+    private static function addRoute(string $uri, string $method, $callback)  
     {
-        $this->routes = [
-            'uri' => $uri
+        self::$routes = [
+            'uri' => $uri,
+            'method' => $method,
+            'callback' => $callback
         ];
     }
 
-    public static function get()
+    public static function get(string $uri, $callback)
     {
+        self::addRoute($uri, 'GET', $callback);
+    }
+
+    public static function post(string $uri, $callback)
+    {
+        self::addRoute($uri, 'GET', $callback);
+    }
+
+    public static function patch(string $uri, $callback)
+    {
+        self::addRoute($uri, 'GET', $callback);
+    }
+
+    public static function delete(string $uri, $callback)
+    {
+        self::addRoute($uri, 'GET', $callback);
+    }
+
+    public function setNoutFound(){
 
     }
+
+    public static function routeRequest(){
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+
+        foreach(self::$routes as $route)
+        {
+            if($requestUri === $route['uri'] && $requestMethod === $route['method']){
+                call_user_func($route['callback']);
+                return;
+            }
+        }
+        call_user_func(self::$notFond);
+    }
+
 
 }

@@ -1,9 +1,8 @@
 <?php
-namespace  App;
+namespace Api\v1;
 
-use App\ShortenUrlRequest;
-use App\ShortenUrlService;
-use App\ShortenUrlDao;
+use Api\v1\ShortenUrlService;
+use Api\v1\ShortenUrlDao;
 
 class ShortenUrlController {
 
@@ -12,6 +11,11 @@ class ShortenUrlController {
         $this->dao = new ShortenUrlDao();
     }
 
+    public function get_all(){
+        echo "invoking get_all";
+    }
+    
+    
     public function processRequest(string $method, ?string $short_code) : void 
     {
         if($short_code){

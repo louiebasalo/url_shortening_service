@@ -1,6 +1,7 @@
 <?php
-namespace App;
-use App\Database;
+namespace Api\v1;
+
+use Api\v1\Database;
 use PDO;
 
 class ShortenUrlDao{

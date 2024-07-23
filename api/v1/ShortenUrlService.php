@@ -1,8 +1,7 @@
 <?php 
+namespace Api\v1;
 
-namespace App;
-
-use App\ShortenUrlDao;
+use Api\v1\ShortenUrlDao;
 
 class ShortenUrlService{
     private $domain = 'http://localhost:8000/';
