@@ -1,6 +1,9 @@
 <?php
 
-use Route\Route;
-use Api\v1\ShortenUrlController;
+require_once '../route/Route.php';
 
-Route::get('api/v1', "ShortenUrlController@$controller");
+use Route\Route;
+
+Route::get("api/v1", "ShortenUrlController@get_all");
+
+var_dump(Route::$routes);

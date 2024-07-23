@@ -11,7 +11,7 @@ class ShortenUrlController {
         $this->dao = new ShortenUrlDao();
     }
 
-    public function get_all(){
+    public static function get_all(){
         echo "invoking get_all";
     }
     
