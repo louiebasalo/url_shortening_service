@@ -1,5 +1,6 @@
 RewriteEngine On
 
+#to be used with running the app in Apache
 # Route API requests to api.php
 RewriteCond %{REQUEST_URI} ^/api/
 RewriteRule ^ api.php [L]

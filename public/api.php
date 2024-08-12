@@ -1,15 +1,15 @@
 <?php
 namespace Public;
 
+use Api\v1\ShortenUrlController;
 use Route\Route;
+require_once "./../route/api.routes.php";
 
 header("Content-type: application/json; charset=UTF-8");
 
-spl_autoload_register(function($class){
-    require BASE_PATH."$class.php";
-});
-
-
 $parts = explode("/",$_SERVER["REQUEST_URI"]);
+var_dump($parts);
+
+
 
 Route::routeRequest();

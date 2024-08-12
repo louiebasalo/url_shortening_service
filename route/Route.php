@@ -1,11 +1,14 @@
 <?php
 namespace Route;
 
+require_once './../helper/helper.php';
 use function Helper\controller_x_function;
+use Api\v1\ShortenUrlController;
+require_once '../autoload.php';
 
 class Route {
 
-    private static $routes = array();
+    public static $routes = array();
 
     // public function __construct(){
     //     self::$notFond = function() {
@@ -16,7 +19,6 @@ class Route {
 
     private static function addRoute(string $uri, string $method, $controller)  
     {
-        echo "add";
         self::$routes[] = [
             'uri' => $uri,
             'method' => $method,
@@ -47,16 +49,26 @@ class Route {
     public static function routeRequest(){
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];
-        var_dump(self::$routes);
+        // var_dump(self::$routes);
+        // echo $requestUri;
         foreach(self::$routes as $route)
         {
             if($requestUri === $route['uri'] && $requestMethod === $route['method']){
-                // call_user_func($route['controller']);
-                return controller_x_function($route['controller']);
+                $controller = self::parse_controller($route['controller']);
+                $instance = new $controller['controller']();
+                $function = strval($controller['function']);
+                echo $instance->$function();
+                return;
             }
         }
         // call_user_func(self::$notFond);
 
+    }
+
+    private static function parse_controller($cf) : array
+    {
+        list($controller, $function) = explode('@', $cf);
+        return ['controller' => '\\api\\v1\\'.$controller, 'function'  => $function];
     }
 
 

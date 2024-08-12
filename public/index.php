@@ -1,18 +1,17 @@
 <?php
-namespace Public;
+// namespace Public;
 
 use Api\v1\RedirectController;
 use Api\v1\ShortenUrlController;
 use App\Controller;
 use Route\Route;
 
+require_once '../autoload.php';
+
 const BASE_PATH = __DIR__.'/../';
 
-spl_autoload_register(function($class){
-    require BASE_PATH."$class.php";
-});
-
-
+echo BASE_PATH;
+echo "<br/>";
 $parts = explode("/",$_SERVER["REQUEST_URI"]);
 
 if (strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
@@ -20,6 +19,5 @@ if (strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
     require 'api.php';
 } 
 else { 
-    
+    echo "you are now in index.";
 }
-
