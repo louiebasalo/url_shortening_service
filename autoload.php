@@ -9,11 +9,12 @@ function autoLoader($class){
     $baseDirs = [
         'api\\v1\\' => __DIR__.'/', 
         'app\\' => __DIR__.'/',
+        '/' => __DIR__.'/'
     ];
 
     foreach($baseDirs as $prefix => $baseDir){
 
-        $file = $baseDir . str_replace('\\','/', $class).'.php';
+        $file = $baseDir . str_replace('\\',"/", $class).'.php';
         echo "\n *****".$file."*****";
         if(file_exists($file)){
             echo "\n file above found \n";
