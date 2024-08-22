@@ -62,17 +62,35 @@ class Route {
         // $requestMethod = $_SERVER['REQUEST_METHOD'];
         // var_dump(self::$routes);
 
-
         foreach(self::$routes as $route)
         {
-            if($_SERVER['REQUEST_URI'] === $route['uri'] && $_SERVER['REQUEST_METHOD'] === $route['method']){   // I think this checking operation should have a separate function.
-                $controller = self::parse_controller($route['controller'], $route['uri']);
-                $instance = new $controller['controller']();
-                $function = strval($controller['function']);
-                return $instance->$function();
-            }
-            else {
-                echo 'wala';
+
+            $regex = preg_replace('/\{[^\}]+\}/','([^/]+)',$route['uri']);
+            // $regex = '#^' . $regex . '$#';
+            $regex = "#^$regex$#";
+            var_dump($regex);
+
+            if(preg_match($regex, $_SERVER['REQUEST_URI'], $matches)){
+                if(count($matches) > 1){
+                    echo "\nif match with param \n";
+                    array_shift($matches);
+                    echo strval($matches[0]) . "\n";
+                    var_dump($matches);
+                    echo "\n";
+                    //here, must do the checking to see which http method was used.
+
+                }else{
+                    echo "\nif match and without param \n";
+                    if($_SERVER['REQUEST_URI'] === $route['uri'] && $_SERVER['REQUEST_METHOD'] === $route['method']){   // I think this checking operation should have a separate function.
+                        $controller = self::parse_controller($route['controller'], $route['uri']);
+                        $instance = new $controller['controller']();
+                        $function = strval($controller['function']);
+                        return $instance->$function();
+                    }
+                }
+                
+            }else {
+                echo "wala \n";
             }
         }
         // call_user_func(self::$notFond);
