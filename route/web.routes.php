@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * Route definition
+ */
+
 require_once '../route/Route.php';
 
 use Route\Route;

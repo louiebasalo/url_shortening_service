@@ -11,10 +11,27 @@ class ShortenUrlController {
         $this->dao = new ShortenUrlDao();
     }
 
-    public  function get_all() : string{
-        return "invoking get_all";
+    public  function get_all() {
+        $dao = new ShortenUrlDao();
+        echo json_encode($dao->get_all());
     }
-    
+ 
+    /**
+     * I think we don't need to implement this using the functions processReqeust, resource_request and  collection_request, 
+     * as we'll be using the indiviual functions based on the set router (like the emthod get_all above).
+     */
+
+     public function get($id){
+
+     }
+
+     public function update(){
+
+     }
+
+     public function delete($id){
+        
+     }
     
     public function processRequest(string $method, ?string $short_code) : void 
     {

@@ -21,5 +21,9 @@ if (strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
 } 
 else { 
     require './../route/web.routes.php';
+/**
+ * to be changed as Router::dispatch()
+ * cha naaan
+ */
     Route::routeRequest();
 }

@@ -9,6 +9,6 @@ class Controller {
 
     public function home()
     {
-        echo 'you are at home';
+        require_once('home.php');
     }
 }
