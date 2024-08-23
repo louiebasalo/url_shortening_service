@@ -27,25 +27,30 @@ require_once '../autoload.php';
         {
             $regex = preg_replace('/\{[^\}]+\}/','([^/]+)',$route['uri']);
             $regex = "#^$regex$#";
-            // var_dump($regex);
-
+            //create a separate function for comparing/maching
             if(preg_match($regex, $_SERVER['REQUEST_URI'], $matches) && $_SERVER['REQUEST_METHOD'] === $route['method']){
+
                 if(count($matches) > 1){
-                    // echo "\nif match with param \n";
                     array_shift($matches);
-                    // echo strval($matches[0]) . "\n";
-                    // var_dump($matches);
-                    // echo "\n";
-                    $controller = self::parse_controller($route['controller']);
+
+                    if(is_callable($route['callback'])) {
+                        return call_user_func($route['callback'],$matches[0]);
+                    };
+
+                    $controller = self::parse_controller($route['callback']);
                     $controllerInstance = new $controller['controller']();
                     $function = $controller['function'];
 
                     return $controllerInstance->$function(strval($matches[0]));
+
                 }else{
-                    echo "\nif match and without param \n";
-                    $controller = self::parse_controller($route['controller']);
+
+                    if(is_callable($route['callback'])) {
+                        return call_user_func($route['callback'],$matches[0]); //2nd argument here becomes optional/not in use
+                    };
+
+                    $controller = self::parse_controller($route['callback']);
                     $controllerInstance = new $controller['controller']();
-                    // $function = strval($controller['function']);
                     $function = $controller['function'];
 
                     return $controllerInstance->$function();
@@ -65,6 +70,7 @@ require_once '../autoload.php';
     private static function parse_controller($cf) : array
     {
         list($controller, $function) = explode('@', $cf);
+
         if(strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
         {
             return ['controller' => "\\api\\v1\\$controller", 'function'  => $function];

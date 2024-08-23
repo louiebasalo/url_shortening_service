@@ -14,6 +14,3 @@ Route::get("/api/v1/{code}", "ShortenUrlController@get_by_code");
 Route::post("/api/v1/create","ShortenUrlController@create");
 Route::patch("/api/v1/{code}/update","ShortenUrlController@patch");
 Route::delete("/api/v1/{code}/delete","ShortenUrlController@delete");
-
-
-// var_dump(Route::$routes);

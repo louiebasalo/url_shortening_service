@@ -20,11 +20,11 @@ class Route {
         self::$routes[] = [
             'uri' => $uri,
             'method' => $method,
-            'controller' => $controller, 
+            'callback' => $controller, 
         ];
     }
 
-    public static function get(string $uri, string $conrtoller)
+    public static function get(string $uri, $conrtoller)
     {
         self::addRoute($uri, 'GET', $conrtoller );
     }
