@@ -4,16 +4,9 @@
 use Api\v1\RedirectController;
 use Api\v1\ShortenUrlController;
 use App\Controller;
-use Route\Route;
+use Route\Router;
 
 require_once '../autoload.php';
-
-// const BASE_PATH = __DIR__.'/../';
-
-// echo BASE_PATH;
-
-echo "<br/>";
-$parts = explode("/",$_SERVER["REQUEST_URI"]);
 
 if (strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
 {
@@ -25,5 +18,5 @@ else {
  * to be changed as Router::dispatch()
  * cha naaan
  */
-    Route::routeRequest();
+    Router::dipatch();
 }

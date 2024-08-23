@@ -15,9 +15,9 @@ function autoLoader($class){
     foreach($baseDirs as $prefix => $baseDir){
 
         $file = $baseDir . str_replace('\\',"/", $class).'.php';
-        echo "\n *****".$file."*****";
+        // echo "\n *****".$file."*****";
         if(file_exists($file)){
-            echo "\n file above found \n";
+            // echo "\n file above found \n";
             require_once $file;
             break;
         }else {
@@ -27,7 +27,3 @@ function autoLoader($class){
 }
 
 spl_autoload_register('autoLoader');
-
-// spl_autoload_register(function($class){
-//     include_once str_replace('\\', '/', $class).'.php';
-// });

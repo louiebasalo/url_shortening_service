@@ -15,91 +15,48 @@ class ShortenUrlController {
         $dao = new ShortenUrlDao();
         echo json_encode($dao->get_all());
     }
+
+    public function create() {
+        $data = (array) json_decode(file_get_contents("php://input"), true);
+        $shorten = new ShortenUrlService();
+        $data['short_code'] = $shorten->generate();
+        $this->dao->create($data);
+        http_response_code(201);
+        echo json_encode([
+            'message' => 'short url created.',
+            "short url" => $data['short_code']
+        ]);
+    }
  
-    /**
-     * I think we don't need to implement this using the functions processReqeust, resource_request and  collection_request, 
-     * as we'll be using the indiviual functions based on the set router (like the emthod get_all above).
-     */
-
-     public function get($id){
-
-     }
-
-     public function update(){
-
-     }
-
-     public function delete($id){
-        
-     }
-    
-    public function processRequest(string $method, ?string $short_code) : void 
-    {
-        if($short_code){
-            $this->resource_request($method, $short_code);
-        } else {
-            $this->collection_request($method);
-        }
+    public function get_by_code($code){
+    $data = $this->dao->get_by_short_code($code);
+    if (!$data) {
+        http_response_code(404);
+        echo json_encode([
+            'message' => 'Shorten URL not found!'
+        ]);
+        return;
+    }
+    echo json_encode($data, JSON_PRETTY_PRINT);
     }
 
-    public function resource_request(string $method, string $short_code) : void
-    {
-        // $dao = new ShortenUrlDao();
-        $data = $this->dao->get_by_short_code($short_code);
-        
-        if (!$data) {
-            http_response_code(404);
-            echo json_encode([
-                'message' => 'Shorten URL not found!'
-            ]);
-            return;
-        }
+    public function patch($code){
+    $long_url = (array) json_decode(file_get_contents("php://input"), true);
+    $row = $this->dao->update($code, $long_url['long_url']);
+    http_response_code(201);
+    echo json_encode([
+        "message" => "long link for $code is updated.",
+        "rows" => $row
+    ]);
+    }
 
-        switch($method) {
-            case "GET":
-                echo json_encode($data, JSON_PRETTY_PRINT);
-                break;
-            case "DELETE":
-                $id = $this->dao->delete($short_code); 
-                http_response_code(202);
-                echo json_encode([
-                    "message" => "Deleted.",
-                    "rows" => $id
-                ]);
-                break;
-            case "PATCH":
-                $long_url = (array) json_decode(file_get_contents("php://input"), true);
-                $row = $this->dao->update($short_code, $long_url['long_url']);
-                http_response_code(201);
-                echo json_encode([
-                    "message" => "long link for $short_code is updated.",
-                    "rows" => $row
-                ]);
-                break;
-            default;
-                http_response_code(405);
-                header("Allow: GET, POST, PATCH, DELETE");
-        }
+    public function delete($code){
+    $id = $this->dao->delete($code); 
+    http_response_code(202);
+    echo json_encode([
+        "message" => "Deleted.",
+        "rows" => $id
+    ]);
     }
-    public function collection_request(string $method) : void
-    {
-        if($method == 'POST')
-        {
-            $data = (array) json_decode(file_get_contents("php://input"), true);
-            // $dao = new ShortenUrlDao();
-            $shorten = new ShortenUrlService();
-            $data['short_code'] = $shorten->generate();
-            $this->dao->create($data);
-            http_response_code(201);
-            echo json_encode([
-                'message' => 'short url created.',
-                "short url" => $data['short_code']
-            ]);
-        }else{
-            $dao = new ShortenUrlDao();
-            echo json_encode($dao->get_all());
-        }
-    }
-    
 
 }

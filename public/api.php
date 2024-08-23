@@ -2,7 +2,7 @@
 namespace Public;
 
 use Api\v1\ShortenUrlController;
-use Route\Route;
+use Route\Router;
 require_once "./../route/api.routes.php";
 
 header("Content-type: application/json; charset=UTF-8");
@@ -18,4 +18,4 @@ header("Content-type: application/json; charset=UTF-8");
  * to be changed as Router::dispatch()
  * cha naaan
  */
-Route::routeRequest();
+Router::dipatch();
