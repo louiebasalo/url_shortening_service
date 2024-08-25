@@ -7,6 +7,7 @@ use App\Controller;
 use Route\Router;
 
 require_once '../autoload.php';
+require_once '../config.php';
 
 if (strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
 {

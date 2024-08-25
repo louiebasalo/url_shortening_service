@@ -1,15 +1,15 @@
 <?php
 namespace App;
 
-class Controller {
+use Api\v1\ShortenUrlDao;
 
-    // public function __invoke(){
-    //     require_once 'home.php';
-    // }
+class Controller {
 
     public function home()
     {
-        require_once 'home.php';
+        $dao = new ShortenUrlDao();
+        $data = $dao->get_all();
+        include 'home.php';
     }
 
   

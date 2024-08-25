@@ -4,12 +4,6 @@ namespace Api\v1;
 use Api\v1\ShortenUrlDao;
 
 class ShortenUrlService{
-    private $domain = 'http://localhost:8000/';
-
-    // public function shorten() :string
-    // {
-    //     return $this->domain.$this->generate();
-    // }
 
     public function generate() : string 
     {

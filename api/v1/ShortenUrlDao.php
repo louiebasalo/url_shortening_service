@@ -8,7 +8,10 @@ class ShortenUrlDao{
 
     private $connection;
     public function __construct(){
-        $con = new Database("localhost","url_shortener","root","");
+        $config = new \Config();
+        $config = $config();
+
+        $con = new Database($config['DB_HOST'], $config['DB_NAME'], $config['DB_USER'], $config['DB_PASS']);
         $this->connection = $con->connect();
     }
 
