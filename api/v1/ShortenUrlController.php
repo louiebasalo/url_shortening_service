@@ -43,9 +43,10 @@ class ShortenUrlController {
         echo json_encode([
             'message' => 'Shorten URL not found!'
         ]);
-        return;
+        return false;
     }
     echo json_encode($data, JSON_PRETTY_PRINT);
+        return true;
     }
 
     public function patch($code){
