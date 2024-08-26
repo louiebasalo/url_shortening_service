@@ -16,15 +16,20 @@ class ShortenUrlService{
         {
             $random .= $char[rand(0, $charlen-1)];
         }
-        
+
         return $random;
     }
 
     public function increment_click_counter($data)
     {
-        echo $data['clicks']+1;
+        echo $data['clicks'] + 1;
         $dao = new ShortenUrlDao();
         $dao->increment_click($data['short_code'], $data['clicks']+1);
     }
 
+    public function is_code_exist($code) : bool
+    {
+
+        return true;
+    }
 }
