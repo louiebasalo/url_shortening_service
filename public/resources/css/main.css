@@ -162,6 +162,8 @@ button:hover {
     border-collapse: collapse;
     font-size: 15px;
     color: #4d4d4d;
+    max-height: 500px;
+    overflow: scroll;
 }
 
 .table-section th, .table-section td {

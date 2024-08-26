@@ -17,7 +17,6 @@ class ShortenUrlController {
     }
 
     /**
-     * Should add a retry logic. to check first if the newly generated code already exist in the the database.
      * in the future, this method will be refactor, to accept an argument, the argument would be the custom allias the user provided.
      * @return void
      */
@@ -26,13 +25,16 @@ class ShortenUrlController {
         $shorten = new ShortenUrlService();
         $data['short_code'] = $shorten->generate();
 
-        if($this->get_by_code($data['short_code'])) $this->create(); //retry logic
-
+        //retry logic
+        if($this->dao->get_by_short_code($data['short_code'])) return $this->create(); 
+        //replace above retry logic condition to use the mthod is_code_exists() in ShortenUrlService, 
+        //after I applied the Dependency injection approve or the DI container approach. (singleton approach is also an option but let's just use the former 2)
+        
         $this->dao->create($data);
         http_response_code(201);
         echo json_encode([
             'message' => 'short url created.',
-            "short url" => $data['short_code']
+            "short_url" => $data['short_code']
         ]);
     }
  
@@ -41,12 +43,10 @@ class ShortenUrlController {
     if (!$data) {
         http_response_code(404);
         echo json_encode([
-            'message' => 'Shorten URL not found!'
+            'message' => 'The shortened URL is not found in the database'
         ]);
-        return false;
     }
     echo json_encode($data, JSON_PRETTY_PRINT);
-        return true;
     }
 
     public function patch($code){

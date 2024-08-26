@@ -16,17 +16,17 @@
                 <span class="title">Shorten Your URL</span>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" placeholder="Enter your url">
+                        <input id="original-url" type="text" placeholder="Enter your url">
                         <object type="image/svg+xml" data="resources/img/link-svgrepo-com.svg" class="svg-input-icon"> </object>
                     </div>
                     <object type="image/svg+xml" data="resources/img/arrow-right-lg-svgrepo-com.svg" class="svg-icon" style="margin-right: 10px"> </object>
                     <div class="input-group">
-                        <input type="text" readonly>
+                        <input id="shorten-url" type="text" readonly>
                         <object type="image/svg+xml" data="resources/img/copy-svgrepo-com.svg" class="svg-input-icon"> </object>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="input-group button-group">
+                    <div id="shorten-button" class="input-group button-group">
                         <button type="submit" class="primary">Shorten</button>
                     </div>
                 </div>
