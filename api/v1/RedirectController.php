@@ -6,9 +6,14 @@ use Api\v1\ShortenUrlService;
 
 class RedirectController {
 
+    private $shortenedURLService;
+    public function __construct(ShortenUrlService $shortenedURLService){
+        $this->shortenedURLService = $shortenedURLService;
+    }
+
     public function __invoke($uri){
-        $dao = new ShortenUrlDao();
-        $data = $dao->get_by_short_code($uri);
+       
+        $data = $this->shortenedURLService->getShortenedURL($uri);
 
         if(!$data){
             http_response_code(404);
@@ -16,8 +21,7 @@ class RedirectController {
             return;
         }
 
-        $click = new ShortenUrlService();
-        $click->increment_click_counter($data);
+        $this->shortenedURLService->increment_click_counter($data);
         
         // remove header
         header_remove('Cache-Control');

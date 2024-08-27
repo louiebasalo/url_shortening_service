@@ -8,19 +8,17 @@
  */
 
  namespace Route;
+ use Api\v1\Database;
  use Route\Route;
+ use App\Controller;
+ use Api\v1\ShortenUrlService;
+ use Api\v1\ShortenUrlDao;
+ use Api\v1\RedirectController;
  
 require_once '../autoload.php';
 
  class Router {
 
-    // static $notFond = [];
-    // public function __construct(){
-    //     self::$notFond = function() {
-    //         http_response_code(404);
-    //         echo json_encode(['Resource Not Found.']);
-    //     };
-    // }
     public static function dipatch(){
 
         foreach(Route::$routes as $route)
@@ -38,7 +36,8 @@ require_once '../autoload.php';
                     };
 
                     $controller = self::parse_controller($route['callback']);
-                    $controllerInstance = new $controller['controller']();
+                    $dependency = $controller['dependency'] ? $controller['dependency'] : null;
+                    $controllerInstance = new $controller['controller']($dependency);
                     $function = $controller['function'];
 
                     return $controllerInstance->$function(strval($matches[0]));
@@ -50,14 +49,21 @@ require_once '../autoload.php';
                     };
 
                     $controller = self::parse_controller($route['callback']);
-                    $controllerInstance = new $controller['controller']();
+                    $dependency = $controller['dependency'] ? $controller['dependency'] : null;
+                    $controllerInstance = new $controller['controller']($dependency);
                     $function = $controller['function'];
 
                     return $controllerInstance->$function();
                 }
             }
         }
-        // call_user_func(self::$notFond);
+        http_response_code(404);
+        header("Content-type: application/json; charset=UTF-8");
+        $url = "http".(isset($_SERVER['HTTPS']) ? "s" : "")."://" . $_SERVER['HTTP_HOST'] . "/" . $_SERVER['REQUEST_URI'];
+        echo json_encode([
+            "error" => "resource not found.",
+            "message" => "the endpoint '$url' may not have existed."
+        ]);
     }
 
     /**
@@ -71,11 +77,18 @@ require_once '../autoload.php';
     {
         list($controller, $function) = explode('@', $cf);
 
+        //this dependency injection should be transfered to a container in the future.
+        $config = new \Config();
+        $config = $config();
+        $db = new Database($config['DB_HOST'], $config['DB_NAME'], $config['DB_USER'], $config['DB_PASS']);
+        $dao = new ShortenUrlDao($db->connect());
+        $shortenURLService = new ShortenUrlService($dao);
+
         if(strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
         {
-            return ['controller' => "\\api\\v1\\$controller", 'function'  => $function];
+            return ['controller' => "\\api\\v1\\$controller", 'function'  => $function, 'dependency' => $shortenURLService];
         } else {
-            return ['controller' => "\\app\\$controller", 'function' => $function];
+            return ['controller' => "\\app\\$controller", 'function' => $function, 'dependency' => $shortenURLService]; 
         }
     }
 

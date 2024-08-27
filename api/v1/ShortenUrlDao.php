@@ -7,12 +7,16 @@ use PDO;
 class ShortenUrlDao{
 
     private $connection;
-    public function __construct(){
-        $config = new \Config();
-        $config = $config();
+    // public function __construct(){
+    //     $config = new \Config();
+    //     $config = $config();
 
-        $con = new Database($config['DB_HOST'], $config['DB_NAME'], $config['DB_USER'], $config['DB_PASS']);
-        $this->connection = $con->connect();
+    //     $con = new Database($config['DB_HOST'], $config['DB_NAME'], $config['DB_USER'], $config['DB_PASS']);
+    //     $this->connection = $con->connect();
+    // }
+
+    public function __construct(PDO $pdo){
+        $this->connection = $pdo;
     }
 
     public function get_all() : array
@@ -86,5 +90,18 @@ class ShortenUrlDao{
         $stmt->execute();
         
         return $stmt->rowCount();
+    }
+
+    public function is_shortCode_exist($short_code) : bool
+    {
+        $sql = "SELECT short_code FROM shortened_url WHERE short_code = :short_code";
+        $stmt  = $this->connection->prepare($sql);
+        $stmt->bindValue(":short_code", $short_code, PDO::PARAM_STR);
+        $stmt->execute();
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if(!$data) return false;
+
+        return true;
     }
 }
