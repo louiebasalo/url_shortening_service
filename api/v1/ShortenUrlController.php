@@ -46,6 +46,14 @@ class ShortenUrlController {
     echo json_encode($data, JSON_PRETTY_PRINT);
     }
 
+
+    public function get_and_paginate() 
+    {
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $perPage = isset($_GET['rows']) ? $_GET['rows'] : 10;
+        echo json_encode($this->shortenUrlService->getWithPagination($currentPage, $perPage));
+    }
+
     public function patch($code){
     $long_url = (array) json_decode(file_get_contents("php://input"), true);
     $row = $this->shortenUrlService->updateShortenURL($code, $long_url['long_url']);

@@ -7,13 +7,6 @@ use PDO;
 class ShortenUrlDao{
 
     private $connection;
-    // public function __construct(){
-    //     $config = new \Config();
-    //     $config = $config();
-
-    //     $con = new Database($config['DB_HOST'], $config['DB_NAME'], $config['DB_USER'], $config['DB_PASS']);
-    //     $this->connection = $con->connect();
-    // }
 
     public function __construct(PDO $pdo){
         $this->connection = $pdo;
@@ -26,6 +19,28 @@ class ShortenUrlDao{
 
         $data = [];
 
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            array_push($data,$row);
+        }
+        return $data;
+    }
+
+    public function get_with_pagination($currentPage, $perPage = 3) : array
+    {
+        $stmt = $this->connection->prepare("SELECT COUNT(*) FROM shortened_url");
+        $stmt->execute();
+        $entries = $stmt->fetchColumn();
+        $totalPage = ceil($entries / $perPage);
+
+        $x = ($currentPage - 1) * $perPage;  //the offset or
+        $y = $perPage;  //the number of entries per page
+        // echo "page: $x, rows: $y \n";
+        $sql = "SELECT * FROM shortened_url ORDER BY id asc LIMIT $x, $y";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $data = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 async function fetchData () {
-        const endpoint = 'http://localhost:8000/api/v1';
+        const endpoint = 'http://localhost:8000/api/v1/paginate';
 
         await fetch(endpoint)
             .then(res => res.json()) //in fetch api json() converts the response into a javascript object
