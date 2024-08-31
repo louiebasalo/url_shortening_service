@@ -21,6 +21,17 @@ class ShortenUrlService{
     {
         return $this->dao->get_all();
     }
+
+    public function isShortCodeExist($shortCode) : bool
+    {
+        return $this->dao->is_shortCode_exist($shortCode);
+    }
+
+    public function getWithPagination($currentPage, $perPage) : array
+    {
+        // echo "current page: $currentPage, rows: $perPage \n";
+        return $this->dao->get_with_pagination($currentPage, $perPage);
+    }
     
     public function shortenURL(array $data) : string 
     {
@@ -37,10 +48,6 @@ class ShortenUrlService{
         return $this->dao->delete($shortCode);
     }
     
-    public function isShortCodeExist($shortCode) : bool
-    {
-        return $this->dao->is_shortCode_exist($shortCode);
-    }
 
     public function generate() : string 
     {

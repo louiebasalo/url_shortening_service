@@ -22,11 +22,12 @@ require_once '../autoload.php';
     public static function dipatch(){
 
         foreach(Route::$routes as $route)
-        {
+        {   
+            $currenturi = explode('?', $_SERVER['REQUEST_URI']);
             $regex = preg_replace('/\{[^\}]+\}/','([^/]+)',$route['uri']);
             $regex = "#^$regex$#";
             //create a separate function for comparing/maching
-            if(preg_match($regex, $_SERVER['REQUEST_URI'], $matches) && $_SERVER['REQUEST_METHOD'] === $route['method']){
+            if(preg_match($regex, $currenturi[0], $matches) && $_SERVER['REQUEST_METHOD'] === $route['method']){
 
                 if(count($matches) > 1){
                     array_shift($matches);
@@ -57,13 +58,24 @@ require_once '../autoload.php';
                 }
             }
         }
+
         http_response_code(404);
         header("Content-type: application/json; charset=UTF-8");
         $url = "http".(isset($_SERVER['HTTPS']) ? "s" : "")."://" . $_SERVER['HTTP_HOST'] . "/" . $_SERVER['REQUEST_URI'];
+        // var_dump(Route::$routes);
+        // echo "\n".$_SERVER['REQUEST_URI'];
+        // echo "\nPage = ".$_GET["page"]."\n";
+        // echo "Rows = ".$_GET["rows"]."\n";
+
         echo json_encode([
             "error" => "resource not found.",
             "message" => "the endpoint '$url' may not have existed."
         ]);
+    }
+
+    private static function parse_parameter() 
+    {
+
     }
 
     /**
