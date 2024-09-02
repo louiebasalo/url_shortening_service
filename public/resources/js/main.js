@@ -1,24 +1,32 @@
 
 
-const rowsPerPage = 10;
+let rowsPerPage = 10;
 let currentPage = 1;
-let totalPages = 1;
+let totalPages = 10;
+let totalEntries = 0;
 
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchData(currentPage, rowsPerPage);
+    paginate_controls();
 });
 
 
-async function fetchData () {
+async function fetchData (currentPage, rowsPerPage ) {
+    console.log(`currentPage :: ${currentPage} rows :: ${rowsPerPage}`);
         const endpoint = `http://localhost:8000/api/v1/paginate?page=${currentPage}&rows=${rowsPerPage}`;
 
         await fetch(endpoint)
             .then(res => res.json()) //in fetch api json() converts the response into a javascript object
-            .then(data => populateTable(data));
+            .then(data => {
+                populateTable(data);
+                totalPages = data['meta-data']['total_page'];
+                totalEntries = data['meta-data']['total_entries'];
+            });
 
+        document.getElementById('total-entries-span').textContent = `Showing ${rowsPerPage} of ${totalEntries}`;
+        paginate_controls();
     }
-
 
 const populateTable = (data) => {
     const table = document.getElementById('url-table');
@@ -86,7 +94,7 @@ const shorten_url = () =>{
             }
             try{
                 shorten_url.value = window.location.host + '/' + msg.short_url;
-                fetchData()
+                fetchData(currentPage, rowsPerPage )
             } catch (e) {
                 console.error('Failed to parse JSON:', e);
             }
@@ -98,9 +106,50 @@ const shorten_url = () =>{
 document.getElementById('shorten-button').addEventListener('click', shorten_url);
 
 function  paginate_controls(){
-    const paginatetionContorls = document.getElementById('paginate-buttons-div');
-    paginatetionContorls.innerHTML = '';    
+    const paginationControls = document.getElementById('paginate-buttons-div');
+    paginationControls.innerHTML = '';    
 
+    if(totalPages > 1){
 
-
+        //previouse button
+        if(currentPage > 1){
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '<';
+            prevButton.onclick = () => {
+                currentPage--;
+                console.log(currentPage);
+                fetchData(currentPage, rowsPerPage);
+            }
+            paginationControls.appendChild(prevButton);
+        }
+        //page numbers
+        if(totalPages > 1){
+            for(let i = 1; i <= totalPages; i++){
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                if (i === currentPage) {
+                    pageButton.disabled = true;
+                }
+                pageButton.onclick = () => {
+                    currentPage = i;
+                    loadPage(currentPage);
+                };
+                paginationControls.appendChild(pageButton);
+            }
+        }
+        //next button
+        if(currentPage < totalPages){
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '>';
+            nextButton.onclick = () => {
+                currentPage++;
+                console.log(currentPage+" -- "+totalPages);
+                fetchData(currentPage, rowsPerPage);
+            }
+            paginationControls.appendChild(nextButton);
+        }
+        
+        
+    }
 }
+

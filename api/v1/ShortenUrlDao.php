@@ -27,7 +27,7 @@ class ShortenUrlDao{
         return $data;
     }
 
-    public function get_with_pagination($currentPage, $perPage = 10) : array
+    public function get_with_pagination(int $currentPage, int $perPage = 10) : array
     {
         $meta_data = [];
         $collection_data = [];
@@ -37,8 +37,6 @@ class ShortenUrlDao{
         $stmt->execute();
         $entries = $stmt->fetchColumn();
         $totalPage = ceil($entries / $perPage);
-
-        array_push($meta_data, ['current_page' => $currentPage, 'rows_per_page' => $perPage ,'total_page' => $totalPage, 'total_entries' => $entries]);
 
         $x = ($currentPage - 1) * $perPage;  //the offset or
         $y = $perPage;  //the number of entries per page
@@ -52,7 +50,7 @@ class ShortenUrlDao{
             array_push($collection_data,$row);
         }
 
-        $data["meta-data"] = $meta_data;
+        $data["meta-data"] = ['current_page' => $currentPage, 'rows_per_page' => $perPage ,'total_page' => $totalPage, 'total_entries' => $entries];
         $data["collection"] = $collection_data;
 
         return $data;

@@ -57,6 +57,7 @@
                     </tbody>
                 </table>
                 <div class="pagination-section">
+                    <span id="total-entries-span">showing 10 of 50</span>
                     <div class="paginate-button-group" id="paginate-buttons-div">
                         <button><<</button>
                         <ul>

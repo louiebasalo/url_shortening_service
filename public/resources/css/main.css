@@ -221,6 +221,7 @@ tbody {
     display: flex;
     padding-top: 20px;
     justify-content: center;
+    font-size: 12px;
 }
 
 .paginate-button-group{
@@ -228,6 +229,7 @@ tbody {
     align-items: center;
     flex-direction: row;
     gap: 5px;
+    font-size: 12px;
     
 }
 
@@ -260,6 +262,11 @@ tbody {
 
 .pagination-section li {
     margin: 10px 0 0 0;
+}
+
+.pagination-section span {
+    width: 100%;
+    align-content:center ;
 }
 
 /* Media Queries for Responsiveness */
