@@ -29,7 +29,6 @@ class ShortenUrlService{
 
     public function getWithPagination($currentPage, $perPage) : array
     {
-        // echo "current page: $currentPage, rows: $perPage \n";
         return $this->dao->get_with_pagination($currentPage, $perPage);
     }
     
