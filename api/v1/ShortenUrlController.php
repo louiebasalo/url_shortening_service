@@ -49,8 +49,9 @@ class ShortenUrlController {
 
     public function get_and_paginate() 
     {
-        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
-        $perPage = isset($_GET['rows']) ? $_GET['rows'] : 10;
+        // $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $currentPage = $_GET['page'] ?? 1; //this is called Null Coalescing Operator. this is to simplify isset();
+        $perPage = $_GET['rows'] ?? 10;
         echo json_encode($this->shortenUrlService->getWithPagination($currentPage, $perPage));
     }
 

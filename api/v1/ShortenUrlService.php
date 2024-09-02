@@ -27,9 +27,10 @@ class ShortenUrlService{
         return $this->dao->is_shortCode_exist($shortCode);
     }
 
-    public function getWithPagination($currentPage, $perPage) : array
+    public function getWithPagination(int $currentPage, int $perPage) : array
     {
-        // echo "current page: $currentPage, rows: $perPage \n";
+        $currentPage = ($currentPage < 1) ? 1 : $currentPage;
+        $perPage = ($perPage < 10) ? 10 : $perPage;
         return $this->dao->get_with_pagination($currentPage, $perPage);
     }
     

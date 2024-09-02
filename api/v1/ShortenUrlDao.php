@@ -27,8 +27,12 @@ class ShortenUrlDao{
         return $data;
     }
 
-    public function get_with_pagination($currentPage, $perPage = 3) : array
+    public function get_with_pagination(int $currentPage, int $perPage = 10) : array
     {
+        $meta_data = [];
+        $collection_data = [];
+        $data = [];
+
         $stmt = $this->connection->prepare("SELECT COUNT(*) FROM shortened_url");
         $stmt->execute();
         $entries = $stmt->fetchColumn();
@@ -36,16 +40,19 @@ class ShortenUrlDao{
 
         $x = ($currentPage - 1) * $perPage;  //the offset or
         $y = $perPage;  //the number of entries per page
-        // echo "page: $x, rows: $y \n";
         $sql = "SELECT * FROM shortened_url ORDER BY id asc LIMIT $x, $y";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
-        $data = [];
+
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
-            array_push($data,$row);
+            array_push($collection_data,$row);
         }
+
+        $data["meta-data"] = ['current_page' => $currentPage, 'rows_per_page' => $perPage ,'total_page' => $totalPage, 'total_entries' => $entries];
+        $data["collection"] = $collection_data;
+
         return $data;
     }
 

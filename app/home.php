@@ -26,8 +26,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div id="shorten-button" class="input-group button-group">
-                        <button type="submit" class="primary">Shorten</button>
+                    <div id="shorten-button" class="input-group button-group ">
+                        <button type="submit" class="button-success">Shorten</button>
                     </div>
                 </div>
             </div>
@@ -56,6 +56,23 @@
                         <tr>
                     </tbody>
                 </table>
+                <div class="pagination-section">
+                    <span id="total-entries-span">showing 10 of 50</span>
+                    <div class="paginate-button-group" id="paginate-buttons-div">
+                        <button><<</button>
+                        <ul>
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                            <li>5</li>
+                            <li>...</li>
+                            <li>20</li>
+
+                        </ul>
+                        <button>>></button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
