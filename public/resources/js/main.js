@@ -5,15 +5,23 @@ let currentPage = 1;
 let totalPages = 10;
 let totalEntries = 0;
 
+let pageSet = 5;
+let pageSetStart = 1;
+let pageSetEnd = pageSetStart + pageSet;
+
+const visiblePageButtons = 9; //number of visible page buttons between the 1 and the last page.
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetchData(currentPage, rowsPerPage);
+    fetchData(currentPage);
     paginate_controls();
+
 });
 
 
-async function fetchData (currentPage, rowsPerPage ) {
-    console.log(`currentPage :: ${currentPage} rows :: ${rowsPerPage}`);
+async function fetchData (currentPage ) {
+    // console.log(`currentPage :: ${currentPage} rows :: ${rowsPerPage}`);
         const endpoint = `http://localhost:8000/api/v1/paginate?page=${currentPage}&rows=${rowsPerPage}`;
 
         await fetch(endpoint)
@@ -105,51 +113,119 @@ const shorten_url = () =>{
 
 document.getElementById('shorten-button').addEventListener('click', shorten_url);
 
+function createPaginationButton(text, page, isDisabled = false){
+    const button = document.createElement('button');
+    button.textContent = text;
+    if(isDisabled){
+        button.disabled = true;
+    } else {
+        button.onclick = () => {
+            // console.log(`current page : ${page}, total page: ${totalPages} and isDisabled is: ${isDisabled}`);
+            currentPage = page;
+            fetchData(page);
+        };
+    };
+    return button;
+}
+
+function createEllipsis(setPageStart){
+    const ellipsis = document.createElement('button');
+    ellipsis.textContent = '...';
+    ellipsis.onclick = () => {
+        currentPage = setPageStart;
+        pageSetStart = currentPage;
+        pageSetEnd = pageSetStart + pageSet;
+        paginate_controls();
+        fetchData(currentPage);
+    }
+    return ellipsis;
+}
+
 function  paginate_controls(){
+
+    console.log(`current page : ${currentPage}, pageSetStart: ${pageSetStart} and pageSetEnd is: ${pageSetEnd}`);
+
     const paginationControls = document.getElementById('paginate-buttons-div');
     paginationControls.innerHTML = '';    
 
-    if(totalPages > 1){
+    if(totalPages <= visiblePageButtons){
+        //show all page buttons if total pages is less than 
+        for(let i = 1; i <= totalPages; i++){
+            paginationControls.appendChild(createPaginationButton(i, i, i === currentPage));
+        }
+    } else {
+        //show 1st button
+        paginationControls.appendChild(createPaginationButton(1, 1, currentPage === 1));
+        if(currentPage === 1 || currentPage <= pageSet){
+            pageSetStart = 2;
+            pageSetEnd = pageSetStart+pageSet;
+        }
 
-        //previouse button
-        if(currentPage > 1){
-            const prevButton = document.createElement('button');
-            prevButton.textContent = '<';
-            prevButton.onclick = () => {
-                currentPage--;
-                console.log(currentPage);
-                fetchData(currentPage, rowsPerPage);
-            }
-            paginationControls.appendChild(prevButton);
+        if(currentPage === totalPages){
+            pageSetStart = totalPages-pageSet;
+            pageSetEnd = totalPages;
         }
-        //page numbers
-        if(totalPages > 1){
-            for(let i = 1; i <= totalPages; i++){
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                if (i === currentPage) {
-                    pageButton.disabled = true;
-                }
-                pageButton.onclick = () => {
-                    currentPage = i;
-                    loadPage(currentPage);
-                };
-                paginationControls.appendChild(pageButton);
-            }
+
+        //ellipsis next to first  page
+        if( !(currentPage - pageSet <= 1)){
+            paginationControls.appendChild(createEllipsis(pageSetStart-pageSet));
         }
-        //next button
-        if(currentPage < totalPages){
-            const nextButton = document.createElement('button');
-            nextButton.textContent = '>';
-            nextButton.onclick = () => {
-                currentPage++;
-                console.log(currentPage+" -- "+totalPages);
-                fetchData(currentPage, rowsPerPage);
-            }
-            paginationControls.appendChild(nextButton);
+
+        //for loop to show pages in sets of 5
+        for(let i = pageSetStart; i < pageSetEnd; i++){
+            if(i === totalPages) break;
+            paginationControls.appendChild(createPaginationButton(i, i, i === currentPage));
         }
-        
-        
+        // put ellipsis next to last page
+        if(currentPage < totalPages - pageSet){
+            paginationControls.appendChild(createEllipsis(pageSetStart+pageSet));
+        }
+
+        paginationControls.appendChild(createPaginationButton(totalPages, totalPages, currentPage === totalPages ));
     }
+
+
+    // if(totalPages > 1){
+
+    //     //previouse button
+    //     if(currentPage > 1){
+    //         const prevButton = document.createElement('button');
+    //         prevButton.textContent = '<';
+    //         prevButton.onclick = () => {
+    //             currentPage--;
+    //             console.log(currentPage);
+    //             fetchData(currentPage);
+    //         }
+    //         paginationControls.appendChild(prevButton);
+    //     }
+    //     //page numbers
+    //     if(totalPages > 1){
+    //         for(let i = 1; i <= totalPages; i++){
+    //             const pageButton = document.createElement('button');
+    //             pageButton.textContent = i;
+    //             if (i === currentPage) {
+    //                 pageButton.disabled = true;
+    //             }
+    //             pageButton.onclick = () => {
+    //                 currentPage = i;
+    //                 fetchData(currentPage);
+    //             };
+    //             paginationControls.appendChild(pageButton);
+    //         }
+    //     }
+    //     //next button
+    //     if(currentPage < totalPages){
+    //         const nextButton = document.createElement('button');
+    //         nextButton.textContent = '>';
+    //         nextButton.onclick = () => {
+    //             currentPage++;
+    //             console.log(currentPage+" -- "+totalPages);
+    //             fetchData(currentPage);
+    //         }
+    //         paginationControls.appendChild(nextButton);
+    //     }
+        
+        
+    // }
 }
 
