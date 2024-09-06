@@ -9,6 +9,7 @@
 
  namespace Route;
  use Api\v1\Database;
+ use Api\v1\URLModel;
  use Route\Route;
  use App\Controller;
  use Api\v1\ShortenUrlService;

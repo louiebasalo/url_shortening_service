@@ -2,7 +2,7 @@
 namespace Api\v1;
 
 use Api\v1\ShortenUrlService;
-use Api\v1\ShortenUrlDao;
+use Api\v1\URLModel;
 
 class ShortenUrlController {
 
@@ -49,10 +49,12 @@ class ShortenUrlController {
 
     public function get_and_paginate() 
     {
-        // $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
-        $currentPage = $_GET['page'] ?? 1; //this is called Null Coalescing Operator. this is to simplify isset();
-        $perPage = $_GET['rows'] ?? 10;
-        echo json_encode($this->shortenUrlService->getWithPagination($currentPage, $perPage));
+        // $_GET['page'] ?? 1; //this is called Null Coalescing Operator. this is to simplify isset();
+        $urlModel = new URLModel();
+        $urlModel->set_page($_GET['page'] ?? 1);
+        $urlModel->set_rows($_GET['rows'] ?? 10);
+
+        echo json_encode($this->shortenUrlService->getWithPagination($urlModel));
     }
 
     public function patch($code){
