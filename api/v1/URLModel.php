@@ -79,25 +79,7 @@ class URLModel {
 
 
 /* 
-I've searched many ways of implenting the model class. comparing native php examples, and Laravel's implementation of the model with eloquent (which I think is kind of an overkill for this project's purpose)
-most of the examples have multiple instances of the model in one request, equevalent to the number of collection returned from DAO, but I don't want that so I decided to have all the property and at the same time to have an array property in this model and that is an associative array to hold dataset, since my DAO class is already providing a stractured collection. But I have a fealing this will introduce a problem in the future.
-I am also considring using a model just for the single resource processing, but for operations that returns a collection like the getWithPagination() with a lot of data sets, transfering data directly from dao to srevice is also possible, but then that means an inconsistency in my implementation getting the data
+I've searched many ways of implenting the model class. comparing native php examples in the internet and Laravel's implementation of the model with eloquent (which I think is kind of an overkill for this project's purpose, and I could not follow the level of absraction -_-).
+most of the examples have multiple instances of the model in one request, each for every enntry in the collection from DAO class, but I don't want that so I decided to use 1 isntance of the model for both request and response for space complexity and an array property for the request collection process such as getWithPagination(), by adding an array property, I can maintain the structure of this model and inforce the types of each property.
 
-Also,  I decided to use 1 isntance of the model for both request and response for space complexity, as I think this can be usefull in the future when this will be improved into a full url shortener service or when hosting to the web. char lang.
-
-public function getShortenedURLs($originalUrl, $shortcode) {
-        // Step 1: Create an instance and set initial properties
-        $model = new UserModel();
-        $model->set('original_url', $originalUrl);
-        $model->set('shortcode', $shortcode);
-
-        // Step 2: Pass the model to DAO for querying
-        $queryData = $model->toArray();
-        $results = $this->userDAO->fetchShortenedURLs($queryData);
-
-        // Step 3: Update the same model with results if needed
-        $model->setData($results); // Assuming setData can handle collections
-
-        return $model;
-    }
 */
