@@ -2,6 +2,7 @@
 namespace Api\v1;
 
 use Api\v1\Database;
+use Api\v1\URLModel;
 use PDO;
 
 class ShortenUrlDao{
@@ -27,8 +28,9 @@ class ShortenUrlDao{
         return $data;
     }
 
-    public function get_with_pagination(int $currentPage, int $perPage = 10) : array
+    public function get_with_pagination(URLModel $urlModel) : array
     {
+        
         $meta_data = [];
         $collection_data = [];
         $data = [];
@@ -36,10 +38,10 @@ class ShortenUrlDao{
         $stmt = $this->connection->prepare("SELECT COUNT(*) FROM shortened_url");
         $stmt->execute();
         $entries = $stmt->fetchColumn();
-        $totalPage = ceil($entries / $perPage);
+        $totalPage = ceil($entries / $urlModel->get_rows());
 
-        $x = ($currentPage - 1) * $perPage;  //the offset or
-        $y = $perPage;  //the number of entries per page
+        $x = ($urlModel->get_page() - 1) * $urlModel->get_page();  //the offset
+        $y = $urlModel->get_rows();  //the number of entries per page
         $sql = "SELECT * FROM shortened_url ORDER BY id asc LIMIT $x, $y";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
@@ -50,7 +52,7 @@ class ShortenUrlDao{
             array_push($collection_data,$row);
         }
 
-        $data["meta-data"] = ['current_page' => $currentPage, 'rows_per_page' => $perPage ,'total_page' => $totalPage, 'total_entries' => $entries];
+        $data["meta-data"] = ['current_page' => $urlModel->get_page(), 'rows_per_page' => $y ,'total_page' => $totalPage, 'total_entries' => $entries];
         $data["collection"] = $collection_data;
 
         return $data;

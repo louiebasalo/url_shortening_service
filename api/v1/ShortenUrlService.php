@@ -2,6 +2,7 @@
 namespace Api\v1;
 
 use Api\v1\ShortenUrlDao;
+use Api\v1\URLModel;
 
 class ShortenUrlService{
 
@@ -27,11 +28,11 @@ class ShortenUrlService{
         return $this->dao->is_shortCode_exist($shortCode);
     }
 
-    public function getWithPagination(int $currentPage, int $perPage) : array
+    public function getWithPagination(URLModel $urlModel) : array
     {
-        $currentPage = ($currentPage < 1) ? 1 : $currentPage;
-        $perPage = ($perPage < 10) ? 10 : $perPage;
-        return $this->dao->get_with_pagination($currentPage, $perPage);
+        $urlModel->set_page( ($urlModel->get_page() < 1) ? 1 : $urlModel->get_page() );
+        $urlModel->set_rows( ($urlModel->get_rows() < 10) ? 10 : $urlModel->get_rows() );
+        return $this->dao->get_with_pagination($urlModel);
     }
     
     public function shortenURL(array $data) : string 
