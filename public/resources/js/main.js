@@ -53,19 +53,19 @@ const populateTable = (data) => {
         const td3 = document.createElement('td');
         td3.classList.add('td-action-group');
 
-        const menu = document.createElement('object');
-        menu.classList.add('svg-action-icon');
-        menu.setAttribute('type', 'image/svg+xml');
-        menu.setAttribute('data','resources/img/menu-dots-svgrepo-com.svg');
-        menu.classList.add('svg-button');
-        menu.classList.add('svg-button-menu-dot');
+        const view = document.createElement('button');
+        view.classList.add('svg-action-icon');
+        view.classList.add('svg-button');
+        view.classList.add('table-action-view-button');
+        view.id = `${element.short_code}`;
 
         td1.textContent = window.location.host + '/' + element.short_code;
         td2.textContent =element.clicks; 
+        td3.appendChild(view);
+
         tr.appendChild(td1);
         tr.appendChild(td2);
         tr.appendChild(td3);
-        td3.appendChild(menu);
         tbody.appendChild(tr)
     });
 }
@@ -116,11 +116,11 @@ document.getElementById('shorten-button').addEventListener('click', shorten_url)
 function createPaginationButton(text, page, isDisabled = false){
     const button = document.createElement('button');
     button.textContent = text;
+    button.classList.add('controls');
     if(isDisabled){
         button.disabled = true;
     } else {
         button.onclick = () => {
-            // console.log(`current page : ${page}, total page: ${totalPages} and isDisabled is: ${isDisabled}`);
             currentPage = page;
             fetchData(page);
         };
@@ -131,6 +131,7 @@ function createPaginationButton(text, page, isDisabled = false){
 function createEllipsis(setPageStart){
     const ellipsis = document.createElement('button');
     ellipsis.textContent = '...';
+    ellipsis.classList.add('controls');
     ellipsis.onclick = () => {
         currentPage = setPageStart;
         pageSetStart = currentPage;
@@ -185,47 +186,5 @@ function  paginate_controls(){
     }
 
 
-    // if(totalPages > 1){
-
-    //     //previouse button
-    //     if(currentPage > 1){
-    //         const prevButton = document.createElement('button');
-    //         prevButton.textContent = '<';
-    //         prevButton.onclick = () => {
-    //             currentPage--;
-    //             console.log(currentPage);
-    //             fetchData(currentPage);
-    //         }
-    //         paginationControls.appendChild(prevButton);
-    //     }
-    //     //page numbers
-    //     if(totalPages > 1){
-    //         for(let i = 1; i <= totalPages; i++){
-    //             const pageButton = document.createElement('button');
-    //             pageButton.textContent = i;
-    //             if (i === currentPage) {
-    //                 pageButton.disabled = true;
-    //             }
-    //             pageButton.onclick = () => {
-    //                 currentPage = i;
-    //                 fetchData(currentPage);
-    //             };
-    //             paginationControls.appendChild(pageButton);
-    //         }
-    //     }
-    //     //next button
-    //     if(currentPage < totalPages){
-    //         const nextButton = document.createElement('button');
-    //         nextButton.textContent = '>';
-    //         nextButton.onclick = () => {
-    //             currentPage++;
-    //             console.log(currentPage+" -- "+totalPages);
-    //             fetchData(currentPage);
-    //         }
-    //         paginationControls.appendChild(nextButton);
-    //     }
-        
-        
-    // }
 }
 

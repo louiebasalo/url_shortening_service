@@ -25,11 +25,9 @@
                         <object type="image/svg+xml" data="resources/img/copy-svgrepo-com.svg" class="svg-input-icon"> </object>
                     </div>
                 </div>
-                <div class="form-group">
                     <div id="shorten-button" class="input-group button-group ">
-                        <button type="submit" class="button-success">Shorten</button>
+                        <button type="submit" class="buttons button-success button-large">Shorten</button>
                     </div>
-                </div>
             </div>
             
             <div class="table-section">
@@ -40,41 +38,42 @@
                             <th>Original URL</th>
                             <th>Clicks</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="url-table-body">
-                        <tr>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
-                            <td class="td-action-group">
-                                <object type="image/svg+xml" data="resource/open-in-new-window-svgrepo-com.svg" class="svg-action-icon" style="width: 18px; height: 19px;"> </object>
-                                <object type="image/svg+xml" data="resource/edit-3-svgrepo-com.svg" class="svg-action-icon" style="margin-top:1.5px; height: 15px"> </object>
-                                <object type="image/svg+xml" data="resource/delete-svgrepo-com.svg" class="svg-action-icon" style=" height: 13px; margin-top:2.5px"> </object>
-                            </td>
-                        <tr>
+                        
                     </tbody>
                 </table>
                 <div class="pagination-section">
                     <span id="total-entries-span">showing 10 of 50</span>
                     <div class="paginate-button-group" id="paginate-buttons-div">
-                        <button><<</button>
-                        <ul>
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                            <li>5</li>
-                            <li>...</li>
-                            <li>20</li>
-
-                        </ul>
-                        <button>>></button>
+                        
                     </div>
                 </div>
             </div>
         </div>
+
+        <div id="viewModal" class="modal">
+            <div class="modal-content card">
+                <span>close</span>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <div class="div-message">
+                        <span>
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+                        </span>
+                    </div>
+                    <div class="button-group">
+                        <button class="buttons button-success">Save</button>
+                        <button class="buttons button-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script src="resources/js/main.js"></script>
 </body>
