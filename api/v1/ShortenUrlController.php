@@ -12,8 +12,8 @@ class ShortenUrlController {
     }
 
     public  function get_all() {
-        $urlModel = new URLModel();
-        echo json_encode($this->shortenUrlService->getShortenedURLCollection($urlModel));
+
+        echo json_encode($this->shortenUrlService->getShortenedURLCollection());
     }
 
     /**
