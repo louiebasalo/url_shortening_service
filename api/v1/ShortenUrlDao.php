@@ -9,8 +9,8 @@ class ShortenUrlDao{
 
     private $connection;
 
-    public function __construct(PDO $pdo){
-        $this->connection = $pdo;
+    public function __construct(Database $Database){
+        $this->connection = $Database->connect();
     }
 
     public function get_all() : array
