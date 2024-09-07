@@ -15,12 +15,14 @@
  use Api\v1\ShortenUrlService;
  use Api\v1\ShortenUrlDao;
  use Api\v1\RedirectController;
+ use Api\V1\Container;
+ use ReflectionClass;
  
 require_once '../autoload.php';
 
  class Router {
 
-    public static function dipatch(){
+    public static function dipatch(Container $container){
 
         foreach(Route::$routes as $route)
         {   
@@ -38,11 +40,10 @@ require_once '../autoload.php';
                     };
 
                     $controller = self::parse_controller($route['callback']);
-                    $dependency = $controller['dependency'] ? $controller['dependency'] : null;
-                    $controllerInstance = new $controller['controller']($dependency);
                     $function = $controller['function'];
+                    $controllerobj = $container->get($controller['controller']);
 
-                    return $controllerInstance->$function(strval($matches[0]));
+                    return $controllerobj->$function(strval($matches[0]));
 
                 }else{
 
@@ -51,11 +52,10 @@ require_once '../autoload.php';
                     };
 
                     $controller = self::parse_controller($route['callback']);
-                    $dependency = $controller['dependency'] ? $controller['dependency'] : null;
-                    $controllerInstance = new $controller['controller']($dependency);
                     $function = $controller['function'];
+                    $controllerobj = $container->get($controller['controller']);
 
-                    return $controllerInstance->$function();
+                    return $controllerobj->$function();
                 }
             }
         }
@@ -86,18 +86,11 @@ require_once '../autoload.php';
     {
         list($controller, $function) = explode('@', $cf);
 
-        //this dependency injection should be transfered to a container in the future.
-        $config = new \Config();
-        $config = $config();
-        $db = new Database($config['DB_HOST'], $config['DB_NAME'], $config['DB_USER'], $config['DB_PASS']);
-        $dao = new ShortenUrlDao($db->connect());
-        $shortenURLService = new ShortenUrlService($dao);
-
         if(strpos($_SERVER['REQUEST_URI'], '/api') === 0 )
         {
-            return ['controller' => "\\api\\v1\\$controller", 'function'  => $function, 'dependency' => $shortenURLService];
+            return ['controller' => "\\api\\v1\\$controller", 'function'  => $function];
         } else {
-            return ['controller' => "\\app\\$controller", 'function' => $function, 'dependency' => $shortenURLService]; 
+            return ['controller' => "\\app\\$controller", 'function' => $function]; 
         }
     }
 

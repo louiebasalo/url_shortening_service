@@ -6,10 +6,10 @@
 
 require_once '../route/Route.php';
 
+use Api\v1\RedirectController;
 use Route\Route;
 use Api\v1\Database;
-use Api\v1\ShortenUrlService;
-use Api\v1\ShortenUrlDao;
+use Api\V1\Container;
 
 Route::get("/", "Controller@home");
 Route::get("/update",function () {
@@ -18,13 +18,19 @@ Route::get("/update",function () {
 
 //this is another way, with anonymous function being stored the $routes array.
 Route::get("/{code}", function ($code) {
+    $container = new Container(); //the container object in index.php is out of scope, I created new container object here
 
-    $config = new \Config();
-    $config = $config();
-    $db = new Database($config['DB_HOST'], $config['DB_NAME'], $config['DB_USER'], $config['DB_PASS']);
-    $dao = new ShortenUrlDao($db->connect());
-    $shortenURLService = new ShortenUrlService($dao);
+    $container->set(Database::class, function(){
+        $config = new \Config();
+        $config = $config();
+        return new Database(
+            host: $config['DB_HOST'], 
+            dbname: $config['DB_NAME'], 
+            user: $config['DB_USER'], 
+            password: $config['DB_PASS']
+        );
+    });
 
-    $redirect = new \api\v1\RedirectController($shortenURLService);
-    $redirect($code);
+    $controller = $container->get(RedirectController::class);
+    return $controller($code);
 });
