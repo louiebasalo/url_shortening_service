@@ -3,6 +3,8 @@ namespace Api\v1;
 
 use Api\v1\ShortenUrlService;
 use Api\v1\URLModel;
+use Exception;
+use TypeError;
 
 class ShortenUrlController {
 
@@ -12,8 +14,9 @@ class ShortenUrlController {
     }
 
     public  function get_all() {
-
-        echo json_encode($this->shortenUrlService->getShortenedURLCollection());
+        $urlModel = new URLModel();
+        $response = $this->shortenUrlService->getShortenedURLCollection($urlModel);
+        echo json_encode($response->get_collection(), JSON_PRETTY_PRINT);
     }
 
     /**
@@ -22,28 +25,36 @@ class ShortenUrlController {
      */
     public function create() {
         $data = (array) json_decode(file_get_contents("php://input"), true);
-        $data['short_code'] = $this->shortenUrlService->generate();
 
-        //retry logic
-        if($this->shortenUrlService->isShortCodeExist($data['short_code'])) return $this->create(); 
+        $urlModel = new URLModel();
+        $urlModel->set_originalUrl($data['long_url']);
+        $urlModel->set_shortCode($this->shortenUrlService->generate());
+        $this->shortenUrlService->shortenURL($urlModel);
         
-        $this->shortenUrlService->shortenURL($data);
         http_response_code(201);
         echo json_encode([
-            'message' => 'short url created.',
-            "short_url" => $data['short_code']
+            "message" => "short url created.",
+            "id" => $urlModel->get_id(),
+            "short_url" => $urlModel->get_shortCode()
         ]);
+            // http_response_code(400);
+            // echo json_encode([
+            //     "message" => "Failed to save the shortened URL.",
+            //     "error: " => $e->getMessage()
+            // ]);
     }
  
     public function get_by_code($code){
-    $data = $this->shortenUrlService->getShortenedURL($code);
-    if (!$data) {
-        http_response_code(404);
-        echo json_encode([
-            'message' => 'The shortened URL is not found in the database'
-        ]);
-    }
-    echo json_encode($data, JSON_PRETTY_PRINT);
+        $response = $this->shortenUrlService->getShortenedURL($code);
+
+        if (!$response) {
+            http_response_code(404);
+            echo json_encode([
+                'message' => 'The shortened URL is not found in the database'
+            ]);
+        } else {
+            echo json_encode($response->get_collection(), JSON_PRETTY_PRINT);
+        }
     }
 
 
@@ -54,26 +65,37 @@ class ShortenUrlController {
         $urlModel->set_page($_GET['page'] ?? 1);
         $urlModel->set_rows($_GET['rows'] ?? 10);
 
-        echo json_encode($this->shortenUrlService->getWithPagination($urlModel));
+        $response = $this->shortenUrlService->getWithPagination($urlModel);
+
+        echo json_encode($response->get_collection());
     }
 
     public function patch($code){
-    $long_url = (array) json_decode(file_get_contents("php://input"), true);
-    $row = $this->shortenUrlService->updateShortenURL($code, $long_url['long_url']);
-    http_response_code(200);
-    echo json_encode([
-        "message" => "long link for $code is updated.",
-        "rows" => $row
-    ]);
+        $urlModel = new URLModel();
+        $long_url = (array) json_decode(file_get_contents("php://input"), true);
+        $urlModel->set_originalUrl($long_url['long_url']);
+        $urlModel->set_shortCode($code);
+
+        $row = $this->shortenUrlService->updateShortenURL($urlModel);
+
+        http_response_code(200);
+        echo json_encode([
+            "message" => "long link for $code is updated.",
+            "rows" => $row
+        ]);
     }
 
     public function delete($code){
-    $id = $this->shortenUrlService->deleteShortenURL($code); 
-    http_response_code(200);
-    echo json_encode([
-        "message" => "Deleted.",
-        "rows" => $id
-    ]);
+        $urlModel = new URLModel();
+        $urlModel->set_shortCode($code);
+
+        $id = $this->shortenUrlService->deleteShortenURL($urlModel); 
+
+        http_response_code(200);
+        echo json_encode([
+            "message" => "Deleted.",
+            "rows" => $id
+        ]);
     }
 
 }

@@ -13,7 +13,7 @@ class RedirectController {
 
     public function __invoke($uri){
        
-        $data = $this->shortenedURLService->getShortenedURL($uri);
+        $data = $this->shortenedURLService->getShortenedURLToRedirect($uri);
 
         if(!$data){
             http_response_code(404);
@@ -35,7 +35,7 @@ class RedirectController {
 
         // http_response_code(301);
         header("HTTP/1.1 301 Moved Permanently"); 
-        header('Location: '.$data['long_url'], true, 301);
+        header('Location: '.$data->get_originalUrl(), true, 301);
         header("Connection: close");
     }
 
