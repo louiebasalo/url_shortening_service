@@ -62,7 +62,7 @@ require_once '../autoload.php';
 
         http_response_code(404);
         header("Content-type: application/json; charset=UTF-8");
-        $url = "http".(isset($_SERVER['HTTPS']) ? "s" : "")."://" . $_SERVER['HTTP_HOST'] . "/" . $_SERVER['REQUEST_URI'];
+        $url = "http".(isset($_SERVER['HTTPS']) ? "s" : "")."://" . $_SERVER['HTTP_HOST'] . "" . $_SERVER['REQUEST_URI'];
 
         echo json_encode([
             "error" => "resource not found.",
