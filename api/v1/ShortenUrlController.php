@@ -3,8 +3,7 @@ namespace Api\v1;
 
 use Api\v1\ShortenUrlService;
 use Api\v1\URLModel;
-use Exception;
-use TypeError;
+use Api\V1\ValidateURL;
 
 class ShortenUrlController {
 
@@ -26,7 +25,19 @@ class ShortenUrlController {
     public function create() {
         $data = (array) json_decode(file_get_contents("php://input"), true);
 
+        $validateURL = new ValidateURL($data);
+        if(!$validateURL->validate()) {
+            
+            http_response_code(400);
+            echo json_encode([
+                "message" => "Failed to save.",
+                "error: " => $validateURL->failure_message()
+            ]);
+            return;
+        } 
+
         $urlModel = new URLModel();
+
         $urlModel->set_originalUrl($data['long_url']);
         $urlModel->set_shortCode($this->shortenUrlService->generate());
         $this->shortenUrlService->shortenURL($urlModel);
@@ -37,11 +48,6 @@ class ShortenUrlController {
             "id" => $urlModel->get_id(),
             "short_url" => $urlModel->get_shortCode()
         ]);
-            // http_response_code(400);
-            // echo json_encode([
-            //     "message" => "Failed to save the shortened URL.",
-            //     "error: " => $e->getMessage()
-            // ]);
     }
  
     public function get_by_code($code){
@@ -71,10 +77,30 @@ class ShortenUrlController {
     }
 
     public function patch($code){
-        $urlModel = new URLModel();
         $long_url = (array) json_decode(file_get_contents("php://input"), true);
+
+        $validateURL = new ValidateURL($long_url);
+        if(!$validateURL->validate()) {
+            
+            http_response_code(400);
+            echo json_encode([
+                "error" => "Failed to save.",
+                "message" => $validateURL->failure_message()
+            ]);
+            return;
+        } 
+
+        $urlModel = new URLModel();
         $urlModel->set_originalUrl($long_url['long_url']);
         $urlModel->set_shortCode($code);
+
+        if(!$this->shortenUrlService->isShortCodeExist($code)){
+            http_response_code(404);
+            echo json_encode([
+                "message" => "Nothing Updated. Code $code does not exist."
+            ]);
+            return;
+        }
 
         $row = $this->shortenUrlService->updateShortenURL($urlModel);
 
@@ -88,7 +114,14 @@ class ShortenUrlController {
     public function delete($code){
         $urlModel = new URLModel();
         $urlModel->set_shortCode($code);
-
+        
+        if(!$this->shortenUrlService->isShortCodeExist($code)){
+            http_response_code(404);
+            echo json_encode([
+                "message" => "Nothing deleted. Code $code does not exist."
+            ]);
+            return;
+        }
         $id = $this->shortenUrlService->deleteShortenURL($urlModel); 
 
         http_response_code(200);
