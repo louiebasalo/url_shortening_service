@@ -14,7 +14,7 @@ class RedirectController {
     public function __invoke($uri){
        
         $data = $this->shortenedURLService->getShortenedURLToRedirect($uri);
-
+        
         if(!$data){
             http_response_code(404);
             echo json_encode(["message" => "URI not found!"]);

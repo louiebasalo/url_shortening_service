@@ -20,7 +20,7 @@ class ShortenUrlService{
 
     public function getShortenedURLToRedirect(string $shortCode) : URLModel | false
     {
-        return $this->dao->get_ShortCode($shortCode);
+        return $this->dao->get_originalURL_clicks($shortCode);
     }
 
     public function getShortenedURLCollection(URLModel $urlModel) :  URLModel 
@@ -80,7 +80,7 @@ class ShortenUrlService{
      */
     public function increment_click_counter(URLModel $uRLModel) : void
     {
-        $this->dao->increment_click($uRLModel->get_shortCode(), $uRLModel->get_clicks()+1);
+        $this->dao->increment_click($uRLModel->get_id(), $uRLModel->get_clicks()+1);
     }
 
 }

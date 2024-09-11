@@ -39,7 +39,7 @@ class ShortenUrlDao{
         $entries = $stmt->fetchColumn();
         $totalPage = ceil($entries / $urlModel->get_rows());
 
-        $x = ($urlModel->get_page() - 1) * $urlModel->get_page();  //the offset
+        $x = ($urlModel->get_page() - 1) * $urlModel->get_rows();  //the offset
         $y = $urlModel->get_rows();  //the number of entries per page
         $sql = "SELECT * FROM shortened_url ORDER BY id asc LIMIT $x, $y";
         $stmt = $this->connection->prepare($sql);
@@ -93,7 +93,7 @@ class ShortenUrlDao{
         return $newModelInstance;
     }
 
-    public function get_ShortCode(string $short_code) : URLModel | false
+    public function get_originalURL_clicks(string $short_code) : URLModel | false
     {
         $sql = "SELECT long_url, clicks, id FROM shortened_url WHERE short_code = :short_code";
         $stmt = $this->connection->prepare($sql);
@@ -111,15 +111,15 @@ class ShortenUrlDao{
         return $newModelInstance;
     }
 
-    public function increment_click(string $short_code, int $click) : void
+    public function increment_click(int $id, int $click) : void
     {
         $sql = "UPDATE shortened_url
                 SET clicks = :clicks
-                WHERE short_code = :short_code
+                WHERE id = :id
                 ";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue(":clicks", $click, PDO::PARAM_INT);
-        $stmt->bindValue(":short_code", $short_code, PDO::PARAM_STR);
+        $stmt->bindValue(":id", $id, PDO::PARAM_STR);
         $stmt->execute();
     }
 
