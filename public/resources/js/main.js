@@ -7,9 +7,9 @@ let totalEntries = 0;
 
 let pageSet = 5;
 let pageSetStart = 1;
-let pageSetEnd = pageSetStart + pageSet;
+let pageSetEnd = (pageSetStart - 1)  + pageSet;
 
-const visiblePageButtons = 9; //number of visible page buttons between the 1 and the last page.
+// const visiblePageButtons = 9; //number of visible page buttons between the 1 and the last page.
 
 
 
@@ -128,14 +128,21 @@ function createPaginationButton(text, page, isDisabled = false){
     return button;
 }
 
-function createEllipsis(setPageStart){
+function createEllipsis(next, direction){
     const ellipsis = document.createElement('button');
     ellipsis.textContent = '...';
     ellipsis.classList.add('controls');
     ellipsis.onclick = () => {
-        currentPage = setPageStart;
-        pageSetStart = currentPage;
-        pageSetEnd = pageSetStart + pageSet;
+        if(direction === 'right'){
+            currentPage = next;
+            pageSetStart = currentPage;
+            pageSetEnd = (currentPage - 1) + pageSet;
+        } else {
+            currentPage = next;
+            pageSetEnd = currentPage;
+            pageSetStart = (pageSetEnd + 1) - pageSet;
+        }
+
         paginate_controls();
         fetchData(currentPage);
     }
@@ -149,37 +156,39 @@ function  paginate_controls(){
     const paginationControls = document.getElementById('paginate-buttons-div');
     paginationControls.innerHTML = '';    
 
-    if(totalPages <= visiblePageButtons){
-        //show all page buttons if total pages is less than 
-        for(let i = 1; i <= totalPages; i++){
+    if(totalPages <= pageSet){
+        //show all page buttons if total pages is less than the pageSet
+        for(let i = 2; i <= totalPages; i++){
             paginationControls.appendChild(createPaginationButton(i, i, i === currentPage));
         }
     } else {
         //show 1st button
         paginationControls.appendChild(createPaginationButton(1, 1, currentPage === 1));
+
         if(currentPage === 1 || currentPage <= pageSet){
-            pageSetStart = 2;
-            pageSetEnd = pageSetStart+pageSet;
+            pageSetStart = 1;
+            pageSetEnd = pageSet;
         }
 
         if(currentPage === totalPages){
-            pageSetStart = totalPages-pageSet;
+            pageSetStart = totalPages - (pageSet - 1);
             pageSetEnd = totalPages;
         }
 
         //ellipsis next to first  page
-        if( !(currentPage - pageSet <= 1)){
-            paginationControls.appendChild(createEllipsis(pageSetStart-pageSet));
+        if( (pageSetStart > pageSet)){
+            paginationControls.appendChild(createEllipsis(pageSetStart-1, 'left'));
         }
 
-        //for loop to show pages in sets of 5
-        for(let i = pageSetStart; i < pageSetEnd; i++){
+        //for-loop to show pages in sets of pageSet
+        for(let i = pageSetStart; i <= pageSetEnd; i++){
+            if(i === 1) continue;
             if(i === totalPages) break;
             paginationControls.appendChild(createPaginationButton(i, i, i === currentPage));
         }
         // put ellipsis next to last page
-        if(currentPage < totalPages - pageSet){
-            paginationControls.appendChild(createEllipsis(pageSetStart+pageSet));
+        if(pageSetEnd < totalPages){
+            paginationControls.appendChild(createEllipsis(pageSetEnd+1, 'right'));
         }
 
         paginationControls.appendChild(createPaginationButton(totalPages, totalPages, currentPage === totalPages ));
