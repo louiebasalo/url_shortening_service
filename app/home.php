@@ -21,8 +21,10 @@
                     </div>
                     <object type="image/svg+xml" data="resources/img/arrow-right-lg-svgrepo-com.svg" class="svg-icon" style="margin-right: 10px"> </object>
                     <div class="input-group">
-                        <input id="shorten-url" type="text" readonly>
-                        <object type="image/svg+xml" data="resources/img/copy-svgrepo-com.svg" class="svg-input-icon"> </object>
+                        <div id="copied-message"><span>✔ Copied!</span></div>
+                        <input id="shortened-url" type="text" readonly>
+                        <!-- <object type="image/svg+xml" data="resources/img/copy-svgrepo-com.svg" class="svg-input-icon" id="svg-copy-button"> </object> -->
+                         <button id="copy-button" class="svg-input-icon"></button>
                     </div>
                 </div>
                     <div id="shorten-button" class="input-group button-group ">
