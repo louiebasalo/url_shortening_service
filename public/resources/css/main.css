@@ -43,7 +43,7 @@ body {
 .svg-input-icon {
     position: absolute;
     width: 20px;
-    right: 20px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
 }
@@ -54,20 +54,11 @@ body {
 
 }
 
-
 .svg-icon {
     width: 25px;
     height: 25px;
     margin: 0 10px 0 10px;
 }
-
-/* .td-action-group {
-    position: relative;
-    display: flex;
-    flex-direction: row ;
-    justify-content: flex-end;
-    gap: 15px;
-} */
 
 .input-group {
     position: relative;
@@ -122,6 +113,31 @@ input[type="text"]:focus {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+}
+#copy-button {
+    background-color: transparent;
+    border: none;
+    height: 20px;
+    width: 20px;
+    background-image: url('../img/copy-svgrepo-com.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#copy-button:hover {
+    cursor: copy;
+}
+
+#copied-message {
+    display: none;
+    width: 80px;
+    height: 20px;
+    position: absolute;
+    top: -25px;
+    right: 0px;
+    color: #008060;
+    justify-content: center;
+    align-items: center;
 }
 
 .table-action-view-button:hover {
@@ -223,27 +239,6 @@ tbody {
 
 }
 
-.pagination-section ul {
-    padding: 0px;
-    justify-content: center;
-    outline: none;
-}
-
-.pagination-section ul li {
-    display: inline-block;
-    text-align: center;
-    font-size: 12px;
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    /* background-color: #4d4d4d; */
-    border-radius: 3px;
-    /* line-height: 5px; */
-}
-
-.pagination-section li {
-    margin: 10px 0 0 0;
-}
 
 .pagination-section span {
     width: 100%;

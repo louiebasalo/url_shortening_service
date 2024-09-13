@@ -2,7 +2,7 @@
 
 let rowsPerPage = 10;
 let currentPage = 1;
-let totalPages = 10;
+let totalPages = 0;
 let totalEntries = 0;
 
 let pageSet = 5;
@@ -72,7 +72,7 @@ const populateTable = (data) => {
 
 const shorten_url = () =>{
     const original_url = document.getElementById('original-url').value;
-    const shorten_url = document.getElementById('shorten-url');
+    const shorten_url = document.getElementById('shortened-url');
 
     if(original_url.trim() === '' ){
         alert("original url mandatory");
@@ -176,7 +176,7 @@ function  paginate_controls(){
         }
 
         //ellipsis next to first  page
-        if( (pageSetStart > pageSet)){
+        if( (pageSetStart > pageSet || pageSetStart !== 1)){
             paginationControls.appendChild(createEllipsis(pageSetStart-1, 'left'));
         }
 
@@ -194,6 +194,18 @@ function  paginate_controls(){
         paginationControls.appendChild(createPaginationButton(totalPages, totalPages, currentPage === totalPages ));
     }
 
+
+    document.getElementById('copy-button').addEventListener('click', () => {
+        var copytext = document.getElementById('shortened-url');
+        var copymsg = document.getElementById('copied-message');
+        navigator.clipboard.writeText(copytext.value);
+
+        copymsg.style.display = 'block';
+        setTimeout(function(){
+            copymsg.style.display = 'none';
+        }, 5000);
+
+    });
 
 }
 
