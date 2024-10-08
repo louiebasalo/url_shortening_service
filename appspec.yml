@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /url_shortening_service/
+  - source: /url_shortening_service
     destination: /var/www/html/
 hooks:
   BeforeInstall:
