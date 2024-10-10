@@ -1,9 +1,9 @@
 <?php
 // namespace Public;
 
-use Route\Router;
-use Api\V1\Container;
-use Api\v1\Database;
+use route\Router;
+use api\v1\Container;
+use api\v1\Database;
 
 require_once '../autoload.php';
 require_once '../config.php';

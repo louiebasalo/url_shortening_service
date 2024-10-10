@@ -1,6 +1,6 @@
 <?php
 
-namespace Helper;
+namespace helper;
 
 
 function controller_x_function(string $cf) : string | null

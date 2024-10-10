@@ -1,14 +1,14 @@
 <?php
-namespace Public;
+namespace public;
 
-use Api\v1\Database;
-use Api\v1\ShortenUrlController;
-use Api\v1\ShortenUrlDao;
-use Api\v1\ShortenUrlService;
-use Route\Route;
-use Route\Router;
+use api\v1\Database;
+use api\v1\ShortenUrlController;
+use api\v1\ShortenUrlDao;
+use api\v1\ShortenUrlService;
+use route\Route;
+use route\Router;
 use Config;
-use Api\V1\Container;
+use api\v1\Container;
 
 require_once "./../route/api.routes.php";
 

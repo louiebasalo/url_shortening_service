@@ -1,8 +1,8 @@
 <?php
-namespace Api\v1;
+namespace api\v1;
 
-use Api\v1\Database;
-use Api\v1\URLModel;
+use api\v1\Database;
+use api\v1\URLModel;
 use PDO;
 use PDOException;
 

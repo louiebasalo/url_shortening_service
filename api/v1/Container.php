@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1;
+namespace api\v1;
 use Closure;
 use ReflectionClass;
 

@@ -1,7 +1,7 @@
 <?php
-namespace App;
+namespace app;
 
-use Api\v1\ShortenUrlDao;
+use api\v1\ShortenUrlDao;
 
 class Controller {
 

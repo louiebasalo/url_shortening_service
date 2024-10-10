@@ -6,10 +6,10 @@
 
 require_once '../route/Route.php';
 
-use Api\v1\RedirectController;
-use Route\Route;
-use Api\v1\Database;
-use Api\V1\Container;
+use api\v1\RedirectController;
+use route\Route;
+use api\v1\Database;
+use api\v1\Container;
 
 Route::get("/", "Controller@home");
 Route::get("/update",function () {

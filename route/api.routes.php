@@ -6,7 +6,7 @@
 
 require_once '../route/Route.php';
 
-use Route\Route;
+use route\Route;
 
 Route::get("/api/v1", "ShortenUrlController@get_all");
 // /api/v1/{id} here {id} is called 'path parameter'

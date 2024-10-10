@@ -1,9 +1,9 @@
 <?php
-namespace Api\v1;
+namespace api\v1;
 
-use Api\v1\ShortenUrlService;
-use Api\v1\URLModel;
-use Api\V1\ValidateURL;
+use api\v1\ShortenUrlService;
+use api\v1\URLModel;
+use api\v1\ValidateURL;
 
 class ShortenUrlController {
 

@@ -1,5 +1,5 @@
 <?php
-namespace Api\v1;
+namespace api\v1;
 
 class URLModel {
     

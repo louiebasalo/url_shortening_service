@@ -3,11 +3,11 @@
  * Route collections
  * Note! refactor this class to only perfoms route collections. transfer the dispatch/routeReqeust and parser functions to the Router class.
  */
-namespace Route;
+namespace route;
 
 require_once './../helper/helper.php';
 use function Helper\controller_x_function;
-use Api\v1\ShortenUrlController;
+use api\v1\ShortenUrlController;
 use App\Controller;
 require_once '../autoload.php';
 

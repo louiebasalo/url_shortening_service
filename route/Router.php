@@ -7,15 +7,15 @@
  * add middleware someday
  */
 
- namespace Route;
- use Api\v1\Database;
- use Api\v1\URLModel;
+ namespace route;
+ use api\v1\Database;
+ use api\v1\URLModel;
  use Route\Route;
  use App\Controller;
- use Api\v1\ShortenUrlService;
- use Api\v1\ShortenUrlDao;
- use Api\v1\RedirectController;
- use Api\V1\Container;
+ use api\v1\ShortenUrlService;
+ use api\v1\ShortenUrlDao;
+ use api\v1\RedirectController;
+ use api\v1\Container;
  use ReflectionClass;
  
 require_once '../autoload.php';
