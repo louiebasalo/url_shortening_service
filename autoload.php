@@ -19,7 +19,7 @@ function autoLoader($class){
             require_once $file;
             break;
         }else {
-            echo "file above not found.";
+            echo "file $file not found.";
         }
     }
 }
